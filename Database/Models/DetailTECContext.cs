@@ -27,6 +27,9 @@ namespace Database.Models
         public virtual DbSet<Sucursal> Sucursals { get; set; } = null!;
         public virtual DbSet<Trabajador> Trabajadors { get; set; } = null!;
         public virtual DbSet<TrabajadorSucursal> TrabajadorSucursals { get; set; } = null!;
+        public virtual DbSet<CitaTrabajador> CitaTrabajadors { get; set; } = null!;
+        public virtual DbSet<InsumoProductoLavado> InsumoProductoLavados { get; set; } = null!;
+        public virtual DbSet<ProveedorInsumoProducto> ProveedorInsumoProductos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
