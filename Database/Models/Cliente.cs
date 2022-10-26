@@ -8,6 +8,8 @@ namespace Database.Models
         public Cliente()
         {
             Cita = new HashSet<Citum>();
+            ClienteDireccions = new HashSet<ClienteDireccion>();
+            ClienteTelefonos = new HashSet<ClienteTelefono>();
         }
 
         public string? NombreCompleto { get; set; }
@@ -18,8 +20,8 @@ namespace Database.Models
         public string Correo { get; set; } = null!;
         public int? Puntos { get; set; }
 
-        public virtual ClienteDireccion? ClienteDireccion { get; set; }
-        public virtual ClienteTelefono? ClienteTelefono { get; set; }
         public virtual ICollection<Citum> Cita { get; set; }
+        public virtual ICollection<ClienteDireccion> ClienteDireccions { get; set; }
+        public virtual ICollection<ClienteTelefono> ClienteTelefonos { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Database.Models
             Cita = new HashSet<Citum>();
         }
 
-        public int Cedula { get; set; }
+        public string Cedula { get; set; } = null!;
         public string Nombre { get; set; } = null!;
         public string Apellido1 { get; set; } = null!;
         public string? Apellido2 { get; set; }

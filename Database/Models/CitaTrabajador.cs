@@ -8,9 +8,9 @@ public partial class CitaTrabajador
     public string Sucursal { get; set; }
     public int Cedula { get; set; }
     
-    public virtual Citum Citum { get; set; } = null!;
+    //public virtual Citum Citum { get; set; } = null!;
     
-    public virtual Trabajador CedulaNavigation { get; set; }
+    //public virtual Trabajador CedulaNavigation { get; set; }
     
     
 }

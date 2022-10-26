@@ -27,14 +27,13 @@ namespace Database.Models
         public virtual DbSet<Sucursal> Sucursals { get; set; } = null!;
         public virtual DbSet<Trabajador> Trabajadors { get; set; } = null!;
         public virtual DbSet<TrabajadorSucursal> TrabajadorSucursals { get; set; } = null!;
-        public virtual DbSet<CitaTrabajador> CitaTrabajadors { get; set; } = null!;
-        public virtual DbSet<InsumoProductoLavado> InsumoProductoLavados { get; set; } = null!;
-        public virtual DbSet<ProveedorInsumoProducto> ProveedorInsumoProductos { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server=localhost; database=DetailTEC; integrated security=true;");
             }
         }
 
@@ -43,7 +42,7 @@ namespace Database.Models
             modelBuilder.Entity<CitaProductoConsumido>(entity =>
             {
                 entity.HasKey(e => new { e.Placa, e.Fecha, e.Sucursal, e.NombreIP, e.Marca })
-                    .HasName("PK__CITA_PRO__CDCFE027A201533C");
+                    .HasName("PK__CITA_PRO__CDCFE027BC14A8D7");
 
                 entity.ToTable("CITA_PRODUCTO_CONSUMIDO");
 
@@ -128,7 +127,7 @@ namespace Database.Models
                         r => r.HasOne<Citum>().WithMany().HasForeignKey("PlacaAuto", "FechaCita", "Sucursal").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("cita_trabajador_fk"),
                         j =>
                         {
-                            j.HasKey("PlacaAuto", "FechaCita", "Sucursal", "Cedula").HasName("PK__CITA_TRA__088F04F82048B6F3");
+                            j.HasKey("PlacaAuto", "FechaCita", "Sucursal", "Cedula").HasName("PK__CITA_TRA__088F04F86C18711E");
 
                             j.ToTable("CITA_TRABAJADOR");
 
@@ -137,13 +136,15 @@ namespace Database.Models
                             j.IndexerProperty<DateTime>("FechaCita").HasColumnType("datetime").HasColumnName("Fecha_Cita");
 
                             j.IndexerProperty<string>("Sucursal").HasMaxLength(30).IsUnicode(false);
+
+                            j.IndexerProperty<string>("Cedula").HasMaxLength(15).IsUnicode(false);
                         });
             });
 
             modelBuilder.Entity<Cliente>(entity =>
             {
                 entity.HasKey(e => e.Cedula)
-                    .HasName("PK__CLIENTE__B4ADFE39CABDFA6C");
+                    .HasName("PK__CLIENTE__B4ADFE398439DD15");
 
                 entity.ToTable("CLIENTE");
 
@@ -175,8 +176,8 @@ namespace Database.Models
 
             modelBuilder.Entity<ClienteDireccion>(entity =>
             {
-                entity.HasKey(e => e.Cedula)
-                    .HasName("PK__CLIENTE___B4ADFE39F749FBD4");
+                entity.HasKey(e => new { e.Cedula, e.Direccion })
+                    .HasName("PK__CLIENTE___FAB5712D7DD15C11");
 
                 entity.ToTable("CLIENTE_DIRECCION");
 
@@ -189,16 +190,16 @@ namespace Database.Models
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.CedulaNavigation)
-                    .WithOne(p => p.ClienteDireccion)
-                    .HasForeignKey<ClienteDireccion>(d => d.Cedula)
+                    .WithMany(p => p.ClienteDireccions)
+                    .HasForeignKey(d => d.Cedula)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("cliente_direccion_fk");
             });
 
             modelBuilder.Entity<ClienteTelefono>(entity =>
             {
-                entity.HasKey(e => e.Cedula)
-                    .HasName("PK__CLIENTE___B4ADFE3901B83688");
+                entity.HasKey(e => new { e.Cedula, e.Telefono })
+                    .HasName("PK__CLIENTE___B041AE71FFE67D34");
 
                 entity.ToTable("CLIENTE_TELEFONO");
 
@@ -211,8 +212,8 @@ namespace Database.Models
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.CedulaNavigation)
-                    .WithOne(p => p.ClienteTelefono)
-                    .HasForeignKey<ClienteTelefono>(d => d.Cedula)
+                    .WithMany(p => p.ClienteTelefonos)
+                    .HasForeignKey(d => d.Cedula)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("cliente_telefono_fk");
             });
@@ -220,7 +221,7 @@ namespace Database.Models
             modelBuilder.Entity<InsumoProducto>(entity =>
             {
                 entity.HasKey(e => new { e.NombreIP, e.Marca })
-                    .HasName("PK__INSUMO_P__A626C04DFB17CDDC");
+                    .HasName("PK__INSUMO_P__A626C04D2C94D6EB");
 
                 entity.ToTable("INSUMO_PRODUCTO");
 
@@ -241,7 +242,7 @@ namespace Database.Models
                         r => r.HasOne<InsumoProducto>().WithMany().HasForeignKey("NombreIP", "Marca").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("Lavado_inpro_fk"),
                         j =>
                         {
-                            j.HasKey("NombreIP", "Marca", "Tipo").HasName("PK__INSUMO_P__12A8B661D83AE586");
+                            j.HasKey("NombreIP", "Marca", "Tipo").HasName("PK__INSUMO_P__12A8B6610646E3BC");
 
                             j.ToTable("INSUMO_PRODUCTO_LAVADO");
 
@@ -256,7 +257,7 @@ namespace Database.Models
             modelBuilder.Entity<Lavado>(entity =>
             {
                 entity.HasKey(e => e.Tipo)
-                    .HasName("PK__LAVADO__8E762CB5C946A7A3");
+                    .HasName("PK__LAVADO__8E762CB5486BFAE9");
 
                 entity.ToTable("LAVADO");
 
@@ -272,12 +273,13 @@ namespace Database.Models
             modelBuilder.Entity<Proveedor>(entity =>
             {
                 entity.HasKey(e => e.CedulaJuridica)
-                    .HasName("PK__PROVEEDO__D2F7F5427A7AEE4F");
+                    .HasName("PK__PROVEEDO__D2F7F5427B1374C3");
 
                 entity.ToTable("PROVEEDOR");
 
                 entity.Property(e => e.CedulaJuridica)
-                    .ValueGeneratedNever()
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
                     .HasColumnName("Cedula_Juridica");
 
                 entity.Property(e => e.Contacto)
@@ -305,11 +307,11 @@ namespace Database.Models
                         r => r.HasOne<Proveedor>().WithMany().HasForeignKey("CedulaJuridica").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("pr_inpro_fk"),
                         j =>
                         {
-                            j.HasKey("CedulaJuridica", "NombreIP", "Marca").HasName("PK__PROVEEDO__1895994651B1ABC0");
+                            j.HasKey("CedulaJuridica", "NombreIP", "Marca").HasName("PK__PROVEEDO__189599467B37FE08");
 
                             j.ToTable("PROVEEDOR_INSUMO_PRODUCTO");
 
-                            j.IndexerProperty<int>("CedulaJuridica").HasColumnName("Cedula_Juridica");
+                            j.IndexerProperty<string>("CedulaJuridica").HasMaxLength(15).IsUnicode(false).HasColumnName("Cedula_Juridica");
 
                             j.IndexerProperty<string>("NombreIP").HasMaxLength(50).IsUnicode(false).HasColumnName("NombreI_P");
 
@@ -320,7 +322,7 @@ namespace Database.Models
             modelBuilder.Entity<Sucursal>(entity =>
             {
                 entity.HasKey(e => e.Nombre)
-                    .HasName("PK__SUCURSAL__75E3EFCEB05ED654");
+                    .HasName("PK__SUCURSAL__75E3EFCE8080285F");
 
                 entity.ToTable("SUCURSAL");
 
@@ -352,11 +354,13 @@ namespace Database.Models
             modelBuilder.Entity<Trabajador>(entity =>
             {
                 entity.HasKey(e => e.Cedula)
-                    .HasName("PK__TRABAJAD__B4ADFE39EB1DF367");
+                    .HasName("PK__TRABAJAD__B4ADFE39C6667416");
 
                 entity.ToTable("TRABAJADOR");
 
-                entity.Property(e => e.Cedula).ValueGeneratedNever();
+                entity.Property(e => e.Cedula)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Apellido1)
                     .HasMaxLength(20)
@@ -396,9 +400,13 @@ namespace Database.Models
             modelBuilder.Entity<TrabajadorSucursal>(entity =>
             {
                 entity.HasKey(e => new { e.Cedula, e.Nombre })
-                    .HasName("PK__TRABAJAD__43F3C0C53FFA80C8");
+                    .HasName("PK__TRABAJAD__43F3C0C5A3B694D6");
 
                 entity.ToTable("TRABAJADOR_SUCURSAL");
+
+                entity.Property(e => e.Cedula)
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(30)

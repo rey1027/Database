@@ -10,7 +10,7 @@ namespace Database.Models
             InsumoProductos = new HashSet<InsumoProducto>();
         }
 
-        public int CedulaJuridica { get; set; }
+        public string CedulaJuridica { get; set; } = null!;
         public string Nombre { get; set; } = null!;
         public string CorreoElectronico { get; set; } = null!;
         public string Direccion { get; set; } = null!;

@@ -5,7 +5,7 @@ namespace Database.Models
 {
     public partial class TrabajadorSucursal
     {
-        public int Cedula { get; set; }
+        public string Cedula { get; set; } = null!;
         public string Nombre { get; set; } = null!;
         public DateTime FechaDeInicio { get; set; }
 

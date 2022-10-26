@@ -15,6 +15,7 @@ namespace Database.Models
         public string NombreIP { get; set; } = null!;
         public string Marca { get; set; } = null!;
         public int Costo { get; set; }
+        public int Cantidad { get; set; }
 
         public virtual ICollection<CitaProductoConsumido> CitaProductoConsumidos { get; set; }
 

@@ -10,8 +10,8 @@ public partial class ProveedorInsumoProducto
 
     public string Marca{ get; set; }
     
-    public virtual InsumoProducto NombreIPNavigation { get; set; }
-    public virtual Proveedor CedulaJuricaNavigation { get; set; }
+    //public virtual InsumoProducto NombreIPNavigation { get; set; }
+    //public virtual Proveedor CedulaJuricaNavigation { get; set; }
     
 
 }
